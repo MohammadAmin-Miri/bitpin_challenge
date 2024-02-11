@@ -11,12 +11,17 @@ class TimestampBaseModel(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        proxy = True
+        abstract = True
 
 
 class Article(TimestampBaseModel):
     title = models.CharField(max_length=128)
     text = models.TextField()
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["title"]),
+        ]
 
     def __str__(self) -> str:
         return str(self.title)
