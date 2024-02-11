@@ -34,5 +34,12 @@ class ArticleSerializer(serializers.ModelSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ["article", "user", "point"]
+        fields = ["id", "article", "user", "point"]
         read_only_fields = ("article", "user")
+
+    def create(self, validated_data):
+        point = validated_data.pop("point")
+        review, _ = Review.objects.get_or_create(**validated_data)
+        review.point = point
+        review.save()
+        return review
